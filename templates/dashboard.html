@@ -1,0 +1,543 @@
+<!-- . env/bin/activate  -->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8833296523940545"
+     crossorigin="anonymous"></script>
+  <meta charset="utf-8" />
+  <title>Dashboard</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{url_for('static', filename='img/hero/logo.png')}}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{url_for('static', filename='img/hero/logo.png')}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='img/hero/logo.png')}}">
+  <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='img/hero/logo.png')}}">
+  <link rel="manifest" href="{{url_for('static', filename='img/favicons/manifest.json')}}">
+  <meta name="msapplication-TileImage" content="{{url_for('static', filename='img/favicons/mstile-150x150.png')}}">
+  <meta name="theme-color" content="#ffffff">
+  <!-- ===============================================-->
+  <!--    Stylesheets-->
+  <!-- ===============================================-->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="{{url_for('static', filename='vendors/prism/prism.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='vendors/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='css/theme.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename='css/user.css')}}" rel="stylesheet">
+  <style>
+    .heading {
+      margin: 15px;
+      font-weight: bold;
+      font-size: 25px;
+    }
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 25px;
+    }
+
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      font-size: medium;
+    }
+
+    td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      font-size: small;
+      color: black;
+    }
+
+    .congrats {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background-color: #ffffffff;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      z-index: 1000;
+      text-align: center;
+
+    }
+
+    @media only screen and (max-width: 992px) {
+      .drawer {
+        width: 100%;
+        margin: 0px 0px 0px 0px;
+      }
+
+      .col-body {
+        width: 90%;
+        padding: 10px 10% 10px 10px;
+      }
+    }
+
+    .dropbtn {
+      background-color: transparent;
+      color: transparent;
+      margin-right: 30px;
+      padding: 0px;
+      border: none;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      border-radius: 5px;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+
+    }
+
+    .dropdown:hover .dropbtn {
+      background-color: transparent;
+
+    }
+
+    .congrats {
+      position: fixed;
+      width: 300px;
+      height: 370px;
+      background-color: #ffffffff;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      z-index: 1000;
+      text-align: center;
+
+    }
+  </style>
+</head>
+
+<body style="background: #e3f0e5; color: #348740">
+
+  {% if LoggedIn == false %}
+
+  <script>
+    document.location.href = "/login";
+  </script>
+  <div class="container" ,style="width: 100%; height:100%; background: white ">
+    <h2 style="left: 50%; top: 50%; transform: translate(-50%,-50%);">Session Expired</h2>
+  </div>
+  {% endif %}
+  <nav class="navbar" style="padding-left: 5%; background: #6ebe79; color: white">
+    <h5 class="navbar-brand mb-0 h1">Dashboard</h5>
+    <div class="dropdown">
+      <button class="dropbtn">
+        <div class="navbar-brand mb-0 h1" style="
+              position: relative;
+              border-radius: 100%;
+              background: white;
+              color: black;
+              height: 45px;
+              width: 45px;
+              padding-top: 22.5px;
+              padding-left: 22.5px;
+            ">
+          <div style="transform: translate(-50%, -50%); font-size: 15px">
+            {{user_data['name'][:2].upper()}}
+          </div>
+        </div>
+      </button>
+      <div class="dropdown-content">
+        <a href="/logout">Log Out</a>
+
+      </div>
+    </div>
+  </nav>
+
+  <div class="congrats shadow-lg p-3 mb-5 bg-body rounded" id="dialog">
+    <h3> CASHOUT</h3>
+    <h3 style="font-size: 20px;">Current Balance : {{ user_data['earning'] }}</h3>
+    <div class="row align-items-end" style="margin-top: 25px;">
+      <h6 class="col">Payment Method</h6>
+      <div class="dropdown col">
+        <button class="btn btn-success dropdown-toggle container-fluid" type="button" id="dropdownMenuButton2"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Esewa
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+          <li><a class="dropdown-item" href="#" onclick="setMediam('Esewa')">Esewa</a></li>
+          <li><a class="dropdown-item" onclick="setMediam('Ncell')">Ncell</a></li>
+
+        </ul>
+      </div>
+    </div>
+    <div class="row align-items-end" style="margin-top: 25px;">
+      <h6 class="col">Number</h6>
+      <input class="col" type="text" placeholder="Enter number">
+    </div>
+    <div class="row" style="margin-top: 10px;">
+      <h6 class="col">Select <br> Amount</h6>
+      <div class="dropdown col">
+        <button class="btn btn-success dropdown-toggle container-fluid" type="button" id="dropdownMenuButton1"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          10
+        </button>
+        <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#" onclick="setAmount(10)">10</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setAmount(20)">20</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setAmount(30)">30</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setAmount(40)">40</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setAmount(50)">50</a></li>
+          <li><a class="dropdown-item" href="#" onclick="setAmount(100)">100</a></li>
+
+
+
+
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <button style="margin-top: 30px; margin-left: 5px; margin-right: 5px; " class="btn btn-danger container-fluid col"
+        onclick="closeDialog()" type="button">Cancel</button>
+      <button style="margin-top: 30px; margin-right: 5px; margin-left: 5px;" class="btn btn-success container-fluid col"
+        type="button" onclick="sendWithDrawRequest()">Request</button>
+
+    </div>
+
+  </div>
+  <div class="container" style="margin-left: 0px;">
+    <div class="row flex-row-reverse">
+      <div class="col-9 col-body">
+        <div class="row">
+          <img class="col-2 trophy align-self-center" src="{{url_for('static', filename='assets/star.png')}}" />
+          <div class="col-7 leaderboad align-self-center" id="progress_body" style="
+                box-sizing: border-box;
+                height: 15px;
+                padding-left: 0px;
+                padding-right: 0px;
+                background: #ffffff;
+                border: 1px solid rgba(0, 0, 0, 0.45);
+                border-radius: 12px;
+              ">
+            <div class="col-7 leaderboad align-self-center" id="progress_child" style="
+                  position: relative;
+                  width: 15%;
+                  height: 13px;
+
+                  align-items: flex-start;
+                  padding: 0px;
+
+                  background: #f9b843;
+                  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+                  border-radius: 12px;
+                  text-align: center;
+                  font-size: 10px;
+                ">{{user_data['score']}}/{{user_data['levelup']['score']}}
+            </div>
+          </div>
+
+          <img style="padding-right: 0px; padding-left: 0px;" class="col-3 trophy align-self-center"
+            src="{{url_for('static', filename='assets/gift.svg')}}" />
+        </div>
+
+        <p style="
+              font-family: 'Inter';
+              font-style: normal;
+              font-weight: 700;
+              font-size: 32px;
+              line-height: 39px;
+              color: #348740;
+            ">
+          Current Turnaments
+        </p>
+        <div class="row" style="margin-top: 40px">
+          <p class="col-5 trophy align-self-center" style="
+                font-family: 'Inter';
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 29px;
+                /* identical to box height */
+
+                color: #589d62;
+              ">
+            Your Score :{{ user_data['turnaments']['participants_score']}}
+          </p>
+          <p class="col-5 trophy align-self-center" style="
+                font-family: 'Inter';
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 29px;
+                /* identical to box height */
+
+                color: #589d62;
+              ">
+            High Score : {{user_data['turnaments']['highest_score']}}
+          </p>
+        </div>
+        <a href="/pingpong">
+          <button type="button" name="button" class="btn btn-success btn-lg"
+            style="padding: 5px 30px 5px 30px; margin-top: 35px">
+            Play
+          </button>
+        </a>
+
+        <p style="margin-top: 20px">*just {{user_data['turnaments']['highest_score'] -
+          user_data['turnaments']['participants_score']}} score far from {{user_data['turnaments']['prize']}} ruppees
+        </p>
+        <p style="
+              font-family: 'Inter';
+              margin-top: 40px;
+              font-style: normal;
+              font-weight: 700;
+              font-size: 32px;
+              line-height: 39px;
+              color: #348740;
+            ">
+          Withdraw
+        </p>
+        <p class="col-5 trophy align-self-center" style="
+              font-family: 'Inter';
+              font-style: normal;
+              font-weight: 500;
+              font-size: 20px;
+              line-height: 29px;
+              /* identical to box height */
+
+              color: #589d62;
+            ">
+          Your earning : Rs {{user_data['earning']}}
+        </p>
+
+        <button type="button" name="button" class="btn btn-success btn-lg"
+          style="padding: 5px 30px 5px 30px; margin-top: 35px" onclick="openDialog()">
+          Cash Out
+        </button>
+        <p style="
+              font-family: 'Inter';
+              margin-top: 40px;
+              font-style: normal;
+              font-weight: 700;
+              font-size: 32px;
+              line-height: 39px;
+              color: #348740;
+            ">
+          Referals
+        </p>
+        <p class="col-5 trophy align-self-center" style="
+              font-family: 'Inter';
+              font-style: normal;
+              font-weight: 500;
+              font-size: 20px;
+              line-height: 29px;
+              /* identical to box height */
+
+              color: #589d62;
+            ">
+        <table>
+          <tr>
+            <th>SN</th>
+            <th>User</th>
+            <th>id</th>
+            <th>Reward</th>
+          </tr>
+          {% for ref in user_data['referals'] %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{ref['name']}}</td>
+            <td>{{ref['id'][:8].upper()}}...</td>
+            <td> Rs. {{ref['prize']}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+
+
+        </p>
+        <button type="button" name="button" class="btn btn-success btn-lg"
+          style="padding: 5px 30px 5px 30px; margin-top: 35px; margin-bottom: 10px;" onclick="share()">
+          Invite
+        </button>
+
+      </div>
+      <div class="col-3 drawer container" style="background: white">
+        <div class="heading">
+          <div class="row">
+            <div class="col-9 leaderboad align-self-center">Leaderboad</div>
+
+            <img class="col-3 trophy align-self-center" src="{{url_for('static', filename='assets/trophy.png')}}" />
+          </div>
+          <table>
+            <tr>
+              <th>SN</th>
+              <th>User</th>
+              <th>Score</th>
+            </tr>
+            {% for part in user_data['turnaments']['leaderboard'] %}
+            {% if user_data['id'] == part['id'] %}
+            <tr style="background-color: #9ffcadbb">
+              <td>{{loop.index}}</td>
+              <td>{{part['user']}}</td>
+              <td>{{part['score']}}</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{part['user']}}</td>
+              <td>{{part['score']}}</td>
+            </tr>
+            {% endif %}
+
+            {% endfor %}
+          </table>
+
+
+
+
+
+          <!-- {% for state in user_data['turnaments']['leaderboard'] %}
+              
+            {% endfor %} -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="bg-dark" >
+
+    <div class="container">
+      <p class="text-center fs-1">Our Games</p>
+      <h2 class="mx-auto text-center fs-lg-6 fs-md-5 w-lg-75" style="color: white;">Play Top Games And Get Rewarded</h2>
+      <div class="row gx-xl-7 mt-5">
+        <div class="col-md-4 mb-6 mb-md-0 text-center text-md-start"><img class="w-50 w-md-100" src="{{url_for('static', filename='img/hero/pingpong.png')}}" alt="" />
+          <h4 class="mt-3 my-1" style="color: white;">Ping Pong Turnament</h4>
+          <p class="fs-1 mb-0">Play pingpong Turnament to be rewarded</p><a class="text-dark fs-1 pb-2 fw-bold border-white border-bottom text-decoration-none" href="/testpingpong"><span style="color: white;">Play Now</span><i class="fa-solid fa-arrow-right ms-2"></i></a>
+        </div>
+        <div class="col-md-4 mb-6 mb-md-0 text-center text-md-start"><img class="w-50 w-md-100" src="{{url_for('static', filename='img/hero/supper.png')}}" alt="" />
+          <h4 class="mt-3 my-1" style="color: white;">Super Mario</h4>
+          <p class="fs-1 mb-0">Coming soon the Super mario <br> game</p><a class="text-dark fs-1 pb-2 fw-bold border-white border-bottom text-decoration-none" href="#"><span style="color: white; ">Coming soon</span><i class="fa-solid fa-arrow-right ms-2"></i></a>
+        </div>
+        <div class="col-md-4 mb-6 mb-md-0 text-center text-md-start"><img class="w-50 w-md-100" src="{{url_for('static', filename='img/hero/gamoclip.png')}}" alt="" />
+          <h4 class="mt-3 my-1" style="color: white;">Upload Gaming Clip</h4>
+          <p class="fs-1 mb-0">Plateform for gamers to expose themselves </p><a class="text-dark fs-1 pb-2 fw-bold border-white border-bottom text-decoration-none" href="#"><span style="color: white;">Coming Soon</span><i class="fa-solid fa-arrow-right ms-2"></i></a>
+        </div>
+      </div>
+    </div>
+    <!-- end of .container-->
+
+  </section>
+
+
+
+  </div>
+
+  <script type="text/javascript">
+    const worker = new Worker("{{url_for('static', filename='js/worker.js')}}")
+    // worker.postMessage('create turnament')
+    window.addEventListener("pageshow", function (event) {
+      var historyTraversal = event.persisted ||
+        (typeof window.performance != "undefined" &&
+          window.performance.navigation.type === 2);
+      if (historyTraversal) {
+        // Handle page restore.
+        window.location.reload();
+      }
+    });
+    var progress_body = document.getElementById('progress_body')
+    var progress_child = document.getElementById('progress_child')
+    progress_child.style.width = progress_child.innerHTML.split('/')[0] * progress_body.offsetWidth / progress_child.innerHTML.split('/')[1] + 'px';
+
+
+    function share() {
+      let domain = (new URL(document.location.toString()));  //'https://'+domain.hostname.toString() + "/signup?url={{user_data['id']}}"
+      navigator.clipboard.writeText('http://127.0.0.1:5000/signup' + "?referal_code={{user_data['id']}}");
+      alert('Url Copied')
+    }
+    widget = document.getElementById('dialog')
+    widget.style.display = 'none'
+    function setAmount(cost) {
+      widget = document.getElementById('dropdownMenuButton1')
+      widget.innerHTML = cost
+    }
+    function setMediam(media) {
+      widget = document.getElementById('dropdownMenuButton2')
+      widget.innerHTML = media
+    }
+    function closeDialog() {
+      widget = document.getElementById('dialog')
+      widget.style.display = 'none'
+    }
+
+    function openDialog() {
+      widget1 = document.getElementById('dialog')
+      if ("{{ user_data['earning'] }}" >= 10) {
+        widget = document.getElementById('dialog')
+        widget.style.display = 'block'
+      } else {
+        alert('You need at least 10 rupees to redeem')
+      }
+
+    }
+    function sendWithDrawRequest(){
+      cost = document.getElementById('dropdownMenuButton1').innerHTML.toString()
+      mediam = document.getElementById('dropdownMenuButton2').innerHTML.toString()
+      const val = document.querySelector('input').value;
+      console.log(val);
+      if("{{ user_data['earning'] }}" >= parseInt(cost) & val.toString() != ''){
+        
+          var xhr = new XMLHttpRequest();
+            
+            xhr.open("POST", '/requestWithdrawl/' + mediam + '/' + parseInt(cost) + '/'+ val , true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ }));
+            alert('Succesfully request sent (24h)')
+            closeDialog()
+      }else{
+        if(val.toString() == ''){
+           alert('Enter Your number for transaction')
+        }else{
+          alert("You don't have enough money" + cost.toString())
+        }
+       
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H25T9QWD2C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-H25T9QWD2C');
+</script>
+</body>
+
+</html>

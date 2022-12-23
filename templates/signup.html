@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta
+      name="author"
+      content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta name="generator" content="Hugo 0.83.1" />
+    <title>Sign Up</title>
+    
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/5.0/examples/sign-in/"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link
+      href="/static/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
+      crossorigin="anonymous"
+    />
+
+    <!-- Favicons -->
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/signin.css" rel="stylesheet" />
+  </head>
+  <body class="text-center">
+    {% if LoggedIn %}
+    <script>
+      document.location.href = '/dashboard'
+    </script>
+    {% endif %}
+    <div class="col container">
+        {%with messages= get_flashed_messages(with_categories = true)%} {%if messages%} 
+        {% for category, message in messages %}
+        {%if category == 'error'%}
+    
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-bs-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        {%else%}
+        <div class="alert alert-success alert-dismissable fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-bs-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <script>
+              document.location.href = '/dashboard'
+            </script>
+          </div>
+          {%endif%}
+        {%endfor%} {%endif%} {% endwith %}
+        <main class="form-signin">
+          <form method="POST">
+            <img
+              src="{{url_for('static', filename='assets/logo.png')}}"
+              style="margin-bottom: 20px"
+            />
+    
+            <div class="form-floating">
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="name@example.com"
+              />
+              <label for="email">Email address</label>
+            </div>
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                placeholder="name"
+              />
+              <label for="name">Enter Nickname</label>
+            </div>
+            <div class="form-floating">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Password"
+              />
+              <label for="password">Password</label>
+            </div>
+            <div class="form-floating">
+              <input
+                type="password"
+                class="form-control"
+                id="confirmpassword"
+                name="confirmpassword"
+                placeholder="Password"
+              />
+              <label for="confirmpassword">Confirm Password</label>
+            </div>
+            
+            <button
+              class="w-100 btn btn-lg btn-primary"
+              type="submit"
+              style="background: #6ebe79; border: #6ebe79"
+            >
+              Sign Up
+            </button>
+            <a href="/login">Already have an account ? Signin</a>
+          </form>
+        </main>
+
+    </div>
+    <script>
+      getIpAddress()
+      async function getIpAddress(){
+        
+          var ip= await fetch('https://api.ipify.org/?format=json').then(results=>results.json())
+          var xhr = new XMLHttpRequest();
+          if(document.location.toString().includes('?')){
+            if(!document.location.toString().includes('&ip=') && !document.location.toString().includes('?ip=')){
+              document.location = document.location + '&ip=' + ip['ip'].toString()
+            }
+            
+          }else{
+            if(!document.location.toString().includes('?ip='))
+            {
+              document.location = document.location + '?ip=' + ip['ip'].toString()
+            }
+            
+          }
+          
+        
+        
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H25T9QWD2C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-H25T9QWD2C');
+</script>
+  </body>
+</html>

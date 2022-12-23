@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Ping Pong</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <style>
+    .col-8 {
+      
+      background-color: transparent;
+      height: 85vh;
+      border-top: #505E74 10px solid;
+      border-bottom: #BE2525 10px solid;
+      border-left: #505E74 10px solid;
+      border-right: #505E74 10px solid;
+      padding: 0px;
+      margin: 0px;
+      background-image: "{{ url_for('static', filename='assets/background.png') }}";
+      
+    }
+
+    .ball {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      padding: 0px;
+
+      border-radius: 10px;
+      background: #B60505;
+      box-shadow: inset 2px 2px 4px 1px rgba(255, 253, 253, 0.5);
+
+    }
+
+    .boad {
+      position: relative;
+      width: 58px;
+      height: 8px;
+      padding: 0;
+      bottom: 0;
+      background: rgba(18, 38, 67, 0.74);
+      border-radius: 7px;
+    }
+
+    .progress {
+      box-sizing: border-box;
+      position: relative;
+      width: 80%;
+      background: #FFFFFF;
+      border: 1px solid #000000;
+      border-radius: 11px;
+      padding: 0px;
+    }
+
+    .score {
+      position: relative;
+      width: 20%;
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 24px;
+      text-align: right;
+      /* identical to box height */
+
+
+      color: #000000;
+    }
+
+    .row {
+      align-items: center;
+    }
+
+    .progress_liquid {
+      position: relative;
+      width: 0px;
+      height: 100%;
+      align-items: flex-start;
+      padding: 0px;
+      background: #2CAC48;
+      border-radius: 5px;
+    }
+
+    .dialog {
+      display: block;
+      position: absolute;
+      left: 37.5%;
+      top: 37.5%;
+      background: red;
+      width: 25%;
+      height: 25%;
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 39px;
+      color: #AE0606;
+      background: #F0E1E1;
+      box-shadow: 0px 4px 19px 1px rgba(0, 0, 0, 0.25);
+      border-radius: 18px;
+      text-align: center;
+      align-items: center;
+      z-index: 1000;
+
+
+    }
+
+    .heading {
+      margin-top: 10%;
+      margin-bottom: 10%;
+    }
+
+    #button {
+      position: relative;
+      background: #505E74 10px solid;
+      width: 80%;
+      height: 20%;
+      margin-left: 10%;
+      margin-right: 10%;
+
+
+
+    }
+
+    .buttons{
+      top: 50%;
+      width: 60%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      height: 60vh;
+    }
+
+    .a{
+      height: 60vh;
+    }
+    @media only screen and (max-width: 992px) {
+      .dialog {
+      display: block;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: red;
+      width: 40%;
+      height: 25%;
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 39px;
+      color: #AE0606;
+      background: #F0E1E1;
+      box-shadow: 0px 4px 19px 1px rgba(0, 0, 0, 0.25);
+      border-radius: 18px;
+      text-align: center;
+      align-items: center;
+      z-index: 1000;
+      transform: translate(-50%,-50%);
+
+
+    }
+    }
+
+    .ad{
+      width: 100%;
+      height: 50px;
+      
+    }
+
+    @media (max-width: 575.98px) { 
+     .row{
+      flex-direction: column;
+      position: relative;
+      
+     }
+     .col-8 {
+      background-color: white;
+      max-height: 300px;
+      max-width: 300px;
+      border-top: #505E74 10px solid;
+      border-bottom: #BE2525 10px solid;
+      border-left: #505E74 10px solid;
+      border-right: #505E74 10px solid;
+      padding: 0px;
+      margin: 0px;
+      background-image: "{{ url_for('static', filename='assets/background.png') }}"
+
+
+    }
+    .ad{
+      width:fit-content;
+      height: 180px;
+      
+    }
+
+    }
+
+    /* `md` applies to small devices (landscape phones, less than 768px) */
+    @media (max-width: 767.98px) { 
+      
+    }
+
+  </style>
+</head>
+
+<body onload="autoplay()" background="{{ url_for('static', filename='assets/image 2.png') }}">
+ 
+  <audio id="audio" src="{{url_for('static', filename='assets/touch.mp3')}}"></audio>
+  <audio id="audiodefeat" src="{{url_for('static', filename='assets/defeat.mp3')}}"></audio>
+  <div class="container">
+    <div class="dialog" id="dialog">
+      <div class="container">
+        <div class="row">
+
+          <div class="heading" id="heading">
+            Start Game
+          </div>
+          <button type="button" name="button" id="button" onclick="myMove()">start</button>
+        </div>
+      </div>
+
+
+
+    
+    </div>
+    <div class="row buttons" style="position: fixed;">
+      <div class="col-6 a" id = "left"></div>
+      <div class="col-6 a" id = 'right'></div>
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <div class="ad">
+          ads here
+        </div>
+      </div>
+      <div class="col-8" id="ground">
+        <div class="ball" id="ball">
+        </div>
+        <div class="boad" id="boad">
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="progress" id="progress">
+              <div class="progress_liquid" id="progress_liquid">
+
+              </div>
+            </div>
+            <div class="score" id="score">
+              00
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="ad">
+          ads here
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      var id = null;
+      var speed = 15;
+      var score = 0;
+      var posb = 0
+      const urlParams = new URLSearchParams(window.location.search);
+      var type = urlParams.get('game_type');
+      var board = document.getElementById("boad");
+      var heighest_score = "{{ high_score }}"
+      if(heighest_score == 0){
+        heighest_score = 1;
+      }
+
+      function autoplay(){
+        if(type == 'replay'){
+          myMove();
+        }
+      }
+
+      var screen_width = document.getElementById("ground").offsetWidth -
+        document.getElementById("ball").offsetWidth - 20;
+      var height = document.getElementById("ground").clientHeight -
+        document.getElementById("ball").clientHeight - 10;
+
+
+      board.style.top = height + "px";
+
+
+
+
+      var full_progress = document.getElementById("progress").offsetWidth;
+      if (type != null) {
+
+
+
+      }
+
+
+
+
+      function myMove() {
+
+        if(document.getElementById("button").innerHTML == "replay"){
+          if (urlParams.get('game_type') != 'replay') {
+            document.location.href = document.location.href + '?game_type=replay';
+
+          } else {
+            document.location.href = document.location.href;
+
+          };
+        }else{
+          var elem = document.getElementById("ball");
+        document.getElementById("dialog").style.display = "none";
+
+        var posX = 0;
+        var posY = 0;
+        clearInterval(id);
+        id = setInterval(frame, speed);
+        var increaseX = true;
+        var increaseY = true;
+
+        function frame() {
+
+
+
+          score++;
+          if(score < heighest_score){
+            document.getElementById("progress_liquid").style.width = score * full_progress / heighest_score + 'px';
+         
+          }
+
+          document.getElementById("score").innerHTML = score;
+
+          if (posX == screen_width) {
+            //clearInterval(id);
+            increaseX = false;
+
+          } else if (posX == 0) {
+            increaseX = true;
+          }
+
+
+          if (increaseX) {
+            //clearInterval(id);
+            posX++;
+            elem.style.left = posX + 'px';
+          } else {
+            posX--;
+            elem.style.left = posX + 'px';
+          }
+          /// for Y axis
+
+          if (posY == height && posX + 10 >= posb && posX + 10 < posb + board.offsetWidth) {
+            //clearInterval(id);
+            increaseY = false;
+            let myAudio = document.querySelector('#audio')
+            myAudio.play()
+            speed--;
+           
+            clearInterval(id);
+            id = setInterval(frame, speed);
+
+          } else if (posY == 0) {
+            increaseY = true;
+
+          } else if (posY > height + 10) {
+
+            document.getElementById("ball").style.left = 0;
+            document.getElementById("ball").style.top = 0;
+            document.getElementById("boad").style.left = 0;
+            
+            posX = 0;
+            posY = 0;
+            posb = 0;
+            speed = 20;
+            clearInterval(id);
+            document.getElementById("heading").innerHTML = "GAME OVER";
+            document.getElementById("button").innerHTML = "replay";
+            let defeatAudio = document.querySelector('#audiodefeat');
+            defeatAudio.play();
+            document.getElementById("dialog").style.display = 'block';
+            
+            id = null;
+            mode = '{{ testmode }}'
+            console.log(mode)
+            if(!mode){
+              
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST",document.location.href, true);
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.send(JSON.stringify({
+                  score: document.getElementById("score").innerHTML
+              }));
+            }
+
+            
+            document.getElementById("score").innerHTML = 00;
+
+
+            
+          }
+
+          if (increaseY) {
+            posY++;
+            elem.style.top = posY + 'px';
+          } else {
+            posY--;
+            elem.style.top = posY + 'px';
+          }
+        }}
+      }
+
+      var screen_width_board = document.getElementById("ground").offsetWidth -
+        document.getElementById("boad").offsetWidth - 20;
+        window.addEventListener('keydown', function(event) {
+        if (event.keyCode == 37 && posb > 0) {
+        
+          posb = posb - 15;
+          board.style.left = posb + 'px';
+        } else if (event.keyCode == 39 && posb < screen_width_board) {
+        
+          posb = posb + 15;
+          board.style.left = posb + 'px';
+        }
+
+        
+      });
+      
+      function left(){
+        var screen_width_board = document.getElementById("ground").offsetWidth -
+        document.getElementById("boad").offsetWidth - 20;
+        
+      }
+      var drag = 0.0;
+      document.addEventListener("touchmove", e=>{
+        
+        var screen_width_board_ = document.getElementById("ground").offsetWidth -
+        document.getElementById("boad").offsetWidth - 20;
+
+        ;[...e.changedTouches].forEach(b=>{
+         
+          if(drag < b.pageX){
+            drag = b.pageX;
+            if (posb < screen_width_board_) {
+            
+              posb = posb + 3;
+              board.style.left = posb + 'px';
+            }
+            // posb = posb + 15;
+            // board.style.left = posb + 'px';
+          }else if(drag > b.pageX){
+            drag = b.pageX;        
+                if (posb > 0) {
+              posb = posb - 3;
+              board.style.left = posb + 'px';
+            }
+          }
+        })
+        
+      })
+    </script>
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+      <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H25T9QWD2C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-H25T9QWD2C');
+</script>
+  </body>
+
+</html>
